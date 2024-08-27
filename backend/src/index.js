@@ -1018,9 +1018,9 @@ app.get("/hashsong/:randomId", async (req, res) => {
     const mainSalt =
       result1.toString() + result2.toString() + result3.toString();
 
-      console.log("mainSalt", mainSalt);
-      console.log("result", result);
-    const aesDecrypted = await decrypt(""+result+"", ""+mainSalt+"");
+    console.log("mainSalt", mainSalt);
+    console.log("result", result);
+    const aesDecrypted = await decrypt("" + result + "", "" + mainSalt + "");
     console.log("aesDecrypted", aesDecrypted);
     const audioUrl = `https://harlequin-secure-tortoise-165.mypinata.cloud/ipfs/${aesDecrypted}`;
 
@@ -2830,8 +2830,10 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 const port = process.env.PORT;
-app.listen(port, () => {
+app
+  .listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
-  }).on("error", (err) => {
+  })
+  .on("error", (err) => {
     console.error("Error starting server:", err);
   });
