@@ -47,6 +47,38 @@ app.use(
 
 app.use(cookieParser());
 
+const tempStorage = multer.memoryStorage();
+const uploadT = multer({ storage: tempStorage });
+
+app.post("/upload-chunk", uploadT.single("chunk"), (req, res) => {
+  const { index, totalChunks, filename } = req.body;
+  const chunk = req.file.buffer;
+
+  const tmpDir = path.join(__dirname, "tmp");
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir);
+  }
+
+  const tmpFilePath = path.join(tmpDir, `${filename}.part`);
+
+  fs.appendFileSync(tmpFilePath, chunk);
+
+  if (parseInt(index) === parseInt(totalChunks) - 1) {
+    // All chunks received, move file to final destination
+    const finalDir = path.join(__dirname, "uploads", "audio");
+    if (!fs.existsSync(finalDir)) {
+      fs.mkdirSync(finalDir, { recursive: true });
+    }
+
+    const finalFilePath = path.join(finalDir, filename);
+    fs.renameSync(tmpFilePath, finalFilePath);
+
+    res.json({ message: "File upload complete" });
+  } else {
+    res.json({ message: "Chunk received" });
+  }
+});
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
