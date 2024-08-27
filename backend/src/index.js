@@ -48,7 +48,7 @@ app.use(
 app.use(cookieParser());
 
 // Configure multer for file uploads
-const storage = multer.memoryStorage({
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/audio");
   },
