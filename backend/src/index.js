@@ -26,6 +26,8 @@ const allowedIps = [
   "http://localhost:3000",
   "https://ownsound.xyz/",
   "https://ownsound-three.vercel.app",
+  "https://educhain-ownsound.vercel.app",
+  "https://educhain-ownsound.vercel.app/",
 ];
 
 app.use(
@@ -46,7 +48,7 @@ app.use(
 app.use(cookieParser());
 
 // Configure multer for file uploads
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/audio");
   },
